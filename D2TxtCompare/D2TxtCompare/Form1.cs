@@ -481,6 +481,7 @@ namespace D2TxtCompare
             sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
             targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
             CompareFiles(sourceFolderPathC, targetFolderPathC);
+            textSearch.Text = "";
         }
 
         //User changed source folder location
@@ -516,7 +517,7 @@ namespace D2TxtCompare
                 sourceFolderPath = @"TXT\73090";
             if (dropSource.SelectedIndex == 14)
                 sourceFolderPath = @"TXT\77312";
-            if (dropSource.SelectedIndex == 15 && string.IsNullOrEmpty(sourceFolderPath))
+            if (dropSource.SelectedIndex == 15 && !dropSource.Items.Contains("Custom (Loaded)"))
             {
                 FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
@@ -525,7 +526,7 @@ namespace D2TxtCompare
 
                     if (dropSource.Items.Count > 0)
                     {
-                        dropSource.Items[dropSource.Items.Count - 1] = "Custom (Loaded)"; //Update text to display loaded status
+                        dropSource.Items[dropSource.Items.Count - 1] = "Custom (Loaded)"; // Update text to display loaded status
                         dropSource.SelectedIndex = dropSource.Items.Count - 1;
                     }
                     else
@@ -567,7 +568,7 @@ namespace D2TxtCompare
                 targetFolderPath = @"TXT\73090";
             if (dropTarget.SelectedIndex == 14)
                 targetFolderPath = @"TXT\77312";
-            if (dropTarget.SelectedIndex == 15 && string.IsNullOrEmpty(targetFolderPath))
+            if (dropTarget.SelectedIndex == 15 && !dropTarget.Items.Contains("Custom (Loaded)"))
             {
                 FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
@@ -576,13 +577,14 @@ namespace D2TxtCompare
 
                     if (dropTarget.Items.Count > 0)
                     {
-                        dropTarget.Items[dropTarget.Items.Count - 1] = "Custom (Loaded)"; //Update text to display loaded status
-                        dropTarget.SelectedIndex = dropTarget.Items.Count - 1; 
+                        dropTarget.Items[dropTarget.Items.Count - 1] = "Custom (Loaded)"; // Update text to display loaded status
+                        dropTarget.SelectedIndex = dropTarget.Items.Count - 1;
                     }
                     else
                         dropTarget.Items.Add("Custom (Loaded)");
                 }
             }
+
 
             dropFiles.Items.Clear();
             PopulateComboBox(sourceFolderPath, targetFolderPath, dropFiles);
