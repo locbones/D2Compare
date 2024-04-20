@@ -82,7 +82,7 @@
             // 
             // labelSource
             // 
-            labelSource.Location = new Point(535, 6);
+            labelSource.Location = new Point(535, 11);
             labelSource.Name = "labelSource";
             labelSource.Size = new Size(119, 23);
             labelSource.TabIndex = 4;
@@ -91,7 +91,7 @@
             // 
             // labelTarget
             // 
-            labelTarget.Location = new Point(667, 6);
+            labelTarget.Location = new Point(667, 11);
             labelTarget.Name = "labelTarget";
             labelTarget.Size = new Size(121, 23);
             labelTarget.TabIndex = 5;
@@ -151,7 +151,7 @@
             // 
             // labelFiles
             // 
-            labelFiles.Location = new Point(559, 64);
+            labelFiles.Location = new Point(559, 65);
             labelFiles.Name = "labelFiles";
             labelFiles.Size = new Size(209, 23);
             labelFiles.TabIndex = 13;
@@ -222,6 +222,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
             ClientSize = new Size(1376, 739);
             Controls.Add(textFiles);
             Controls.Add(labelSearch);
