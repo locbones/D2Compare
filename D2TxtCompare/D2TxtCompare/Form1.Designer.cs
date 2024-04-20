@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnConvert = new Button();
+            btnBatchLoad = new Button();
             dropSource = new ComboBox();
             dropTarget = new ComboBox();
             labelSource = new Label();
@@ -45,28 +45,32 @@
             btnNext = new Button();
             labelSearch = new Label();
             textFiles = new RichTextBox();
+            labelStatus = new Label();
             SuspendLayout();
             // 
-            // btnConvert
+            // btnBatchLoad
             // 
-            btnConvert.FlatAppearance.BorderColor = Color.Black;
-            btnConvert.FlatStyle = FlatStyle.Flat;
-            btnConvert.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnConvert.Location = new Point(1230, 12);
-            btnConvert.Name = "btnConvert";
-            btnConvert.Size = new Size(134, 33);
-            btnConvert.TabIndex = 1;
-            btnConvert.Text = "Convert";
-            btnConvert.UseVisualStyleBackColor = true;
-            btnConvert.Visible = false;
+            btnBatchLoad.BackColor = Color.Black;
+            btnBatchLoad.FlatAppearance.BorderColor = Color.DarkRed;
+            btnBatchLoad.FlatAppearance.BorderSize = 3;
+            btnBatchLoad.FlatStyle = FlatStyle.Flat;
+            btnBatchLoad.Font = new Font("Arial", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            btnBatchLoad.ForeColor = Color.BurlyWood;
+            btnBatchLoad.Location = new Point(667, 64);
+            btnBatchLoad.Name = "btnBatchLoad";
+            btnBatchLoad.Size = new Size(130, 39);
+            btnBatchLoad.TabIndex = 1;
+            btnBatchLoad.Text = "Batch Load";
+            btnBatchLoad.UseVisualStyleBackColor = false;
+            btnBatchLoad.Click += btnBatchLoad_Click;
             // 
             // dropSource
             // 
             dropSource.FormattingEnabled = true;
             dropSource.Items.AddRange(new object[] { "Legacy (1.13c+)", "1.0.0.0 (62115)", "1.4.0.0 (64954)", "2.2.0.0 (65890)", "2.3.0.0 (67314)", "2.3.0.1 (67358)", "2.3.1.0 (67554)", "2.4.1.1 (68992)", "2.4.1.2 (69270)", "2.4.3.0 (70161)", "2.5.0.0 (71336)", "2.5.1.0 (71510)", "2.5.2.0 (71776)", "2.6.0.0 (73090)", "2.7.2.0 (77312)", "Custom" });
-            dropSource.Location = new Point(535, 36);
+            dropSource.Location = new Point(526, 29);
             dropSource.Name = "dropSource";
-            dropSource.Size = new Size(121, 23);
+            dropSource.Size = new Size(130, 23);
             dropSource.TabIndex = 2;
             dropSource.SelectedIndexChanged += dropSource_SelectedIndexChanged;
             // 
@@ -74,33 +78,33 @@
             // 
             dropTarget.FormattingEnabled = true;
             dropTarget.Items.AddRange(new object[] { "Legacy (1.13c+)", "1.0.0.0 (62115)", "1.4.0.0 (64954)", "2.2.0.0 (65890)", "2.3.0.0 (67314)", "2.3.0.1 (67358)", "2.3.1.0 (67554)", "2.4.1.1 (68992)", "2.4.1.2 (69270)", "2.4.3.0 (70161)", "2.5.0.0 (71336)", "2.5.1.0 (71510)", "2.5.2.0 (71776)", "2.6.0.0 (73090)", "2.7.2.0 (77312)", "Custom" });
-            dropTarget.Location = new Point(667, 36);
+            dropTarget.Location = new Point(667, 29);
             dropTarget.Name = "dropTarget";
-            dropTarget.Size = new Size(121, 23);
+            dropTarget.Size = new Size(130, 23);
             dropTarget.TabIndex = 3;
             dropTarget.SelectedIndexChanged += dropTarget_SelectedIndexChanged;
             // 
             // labelSource
             // 
-            labelSource.Location = new Point(535, 11);
+            labelSource.Location = new Point(526, 4);
             labelSource.Name = "labelSource";
-            labelSource.Size = new Size(119, 23);
+            labelSource.Size = new Size(128, 23);
             labelSource.TabIndex = 4;
             labelSource.Text = "Source Version";
             labelSource.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // labelTarget
             // 
-            labelTarget.Location = new Point(667, 11);
+            labelTarget.Location = new Point(667, 4);
             labelTarget.Name = "labelTarget";
-            labelTarget.Size = new Size(121, 23);
+            labelTarget.Size = new Size(130, 23);
             labelTarget.TabIndex = 5;
             labelTarget.Text = "Target Version";
             labelTarget.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // textColumns
             // 
-            textColumns.Location = new Point(18, 299);
+            textColumns.Location = new Point(6, 312);
             textColumns.Name = "textColumns";
             textColumns.Size = new Size(349, 421);
             textColumns.TabIndex = 6;
@@ -108,23 +112,23 @@
             // 
             // textRows
             // 
-            textRows.Location = new Point(384, 299);
+            textRows.Location = new Point(361, 312);
             textRows.Name = "textRows";
-            textRows.Size = new Size(349, 421);
+            textRows.Size = new Size(382, 421);
             textRows.TabIndex = 7;
             textRows.Text = "";
             // 
             // textValues
             // 
-            textValues.Location = new Point(749, 299);
+            textValues.Location = new Point(749, 312);
             textValues.Name = "textValues";
-            textValues.Size = new Size(606, 421);
+            textValues.Size = new Size(622, 421);
             textValues.TabIndex = 8;
             textValues.Text = "";
             // 
             // labelColumns
             // 
-            labelColumns.Location = new Point(18, 272);
+            labelColumns.Location = new Point(6, 285);
             labelColumns.Name = "labelColumns";
             labelColumns.Size = new Size(349, 24);
             labelColumns.TabIndex = 9;
@@ -133,9 +137,9 @@
             // 
             // labelRows
             // 
-            labelRows.Location = new Point(384, 272);
+            labelRows.Location = new Point(361, 285);
             labelRows.Name = "labelRows";
-            labelRows.Size = new Size(349, 24);
+            labelRows.Size = new Size(382, 24);
             labelRows.TabIndex = 10;
             labelRows.Text = "Rows Altered";
             labelRows.TextAlign = ContentAlignment.MiddleCenter;
@@ -143,7 +147,7 @@
             // dropFiles
             // 
             dropFiles.FormattingEnabled = true;
-            dropFiles.Location = new Point(595, 90);
+            dropFiles.Location = new Point(526, 80);
             dropFiles.Name = "dropFiles";
             dropFiles.Size = new Size(134, 23);
             dropFiles.TabIndex = 12;
@@ -151,18 +155,18 @@
             // 
             // labelFiles
             // 
-            labelFiles.Location = new Point(559, 65);
+            labelFiles.Location = new Point(526, 55);
             labelFiles.Name = "labelFiles";
-            labelFiles.Size = new Size(209, 23);
+            labelFiles.Size = new Size(135, 23);
             labelFiles.TabIndex = 13;
-            labelFiles.Text = "Choose File to Compare:";
+            labelFiles.Text = "Comparison File";
             labelFiles.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // textSearch
             // 
             textSearch.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point);
             textSearch.ForeColor = SystemColors.WindowFrame;
-            textSearch.Location = new Point(1002, 251);
+            textSearch.Location = new Point(1012, 264);
             textSearch.Name = "textSearch";
             textSearch.Size = new Size(100, 25);
             textSearch.TabIndex = 14;
@@ -179,7 +183,7 @@
             btnPrev.FlatAppearance.BorderSize = 0;
             btnPrev.FlatStyle = FlatStyle.Flat;
             btnPrev.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnPrev.Location = new Point(973, 252);
+            btnPrev.Location = new Point(983, 265);
             btnPrev.Name = "btnPrev";
             btnPrev.Size = new Size(23, 21);
             btnPrev.TabIndex = 15;
@@ -194,7 +198,7 @@
             btnNext.FlatAppearance.BorderSize = 0;
             btnNext.FlatStyle = FlatStyle.Flat;
             btnNext.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnNext.Location = new Point(1108, 252);
+            btnNext.Location = new Point(1118, 265);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(23, 21);
             btnNext.TabIndex = 16;
@@ -203,20 +207,31 @@
             // 
             // labelSearch
             // 
-            labelSearch.Location = new Point(749, 276);
+            labelSearch.Location = new Point(749, 289);
             labelSearch.Name = "labelSearch";
-            labelSearch.Size = new Size(606, 20);
+            labelSearch.Size = new Size(622, 20);
             labelSearch.TabIndex = 17;
             labelSearch.Text = "0 of 0";
             labelSearch.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // textFiles
             // 
-            textFiles.Location = new Point(535, 130);
+            textFiles.Location = new Point(526, 114);
             textFiles.Name = "textFiles";
-            textFiles.Size = new Size(253, 128);
+            textFiles.Size = new Size(271, 128);
             textFiles.TabIndex = 19;
             textFiles.Text = "";
+            // 
+            // labelStatus
+            // 
+            labelStatus.BackColor = SystemColors.Control;
+            labelStatus.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            labelStatus.ForeColor = Color.Black;
+            labelStatus.Location = new Point(526, 245);
+            labelStatus.Name = "labelStatus";
+            labelStatus.Size = new Size(271, 20);
+            labelStatus.TabIndex = 20;
+            labelStatus.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
@@ -224,6 +239,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1376, 739);
+            Controls.Add(labelStatus);
             Controls.Add(textFiles);
             Controls.Add(labelSearch);
             Controls.Add(btnNext);
@@ -240,7 +256,7 @@
             Controls.Add(labelSource);
             Controls.Add(dropTarget);
             Controls.Add(dropSource);
-            Controls.Add(btnConvert);
+            Controls.Add(btnBatchLoad);
             Name = "Form1";
             Text = "D2Compare v1.0";
             ResumeLayout(false);
@@ -248,7 +264,7 @@
         }
 
         #endregion
-        private Button btnConvert;
+        private Button btnBatchLoad;
         private ComboBox dropSource;
         private ComboBox dropTarget;
         private Label labelSource;
@@ -265,5 +281,6 @@
         private Button btnNext;
         private Label labelSearch;
         private RichTextBox textFiles;
+        private Label labelStatus;
     }
 }

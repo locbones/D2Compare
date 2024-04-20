@@ -23,9 +23,27 @@ namespace D2TxtCompare
 
         #region Parsing Functions
 
+        private void CompareFilesForFolder(string sourcePath, string targetPath)
+        {
+            // Get all TXT files in the source/target folder
+            string[] sourceFiles = Directory.GetFiles(sourcePath, "*.txt");
+            string[] targetFiles = Directory.GetFiles(targetPath, "*.txt");
+
+            // Iterate over files in the source folder
+            foreach (string sourceFile in sourceFiles)
+            {
+                string fileName = Path.GetFileName(sourceFile);
+                string targetFile = Array.Find(targetFiles, f => Path.GetFileName(f).Equals(fileName, StringComparison.OrdinalIgnoreCase));
+
+                if (targetFile != null)
+                    CompareFilesBatch(sourceFile, targetFile);
+                else
+                    Debug.WriteLine($"Target file not found for {sourceFile}");
+            }
+        }
+
         private void CompareFiles(string sourcePath, string targetPath)
         {
-
             //Parse results from ReadCSV function and identify headers
             Dictionary<string, List<string>> sourceData = ReadCSV(sourcePath);
             Dictionary<string, List<string>> targetData = ReadCSV(targetPath);
@@ -62,11 +80,84 @@ namespace D2TxtCompare
             if (groupedDifferences.Any())
             {
                 string formattedRtf = FormatRtf(groupedDifferences, sourcePath);
-                textValues.Clear();
-                textValues.SelectedRtf = formattedRtf;
+
+                // Append new data to existing RTF content
+                if (!string.IsNullOrEmpty(textValues.Rtf))
+                {
+                    textValues.Select(textValues.TextLength, 0);
+                    textValues.SelectedRtf = formattedRtf;
+                }
+                else
+                    textValues.Rtf = formattedRtf;
             }
             else
                 textValues.Text = "No differences found.";
+        }
+
+        private void CompareFilesBatch(string sourcePath, string targetPath)
+        {
+            labelStatus.Text = $"Processing: {Path.GetFileName(sourcePath)}";
+            labelStatus.Refresh();
+
+            //Parse results from ReadCSV function and identify headers
+            Dictionary<string, List<string>> sourceData = ReadCSV(sourcePath);
+            Dictionary<string, List<string>> targetData = ReadCSV(targetPath);
+
+            var allHeaders = new HashSet<string>(sourceData.Keys);
+            allHeaders.UnionWith(targetData.Keys);
+
+            string rowHeaderColumn = allHeaders.FirstOrDefault(header => sourceData.ContainsKey(header) && targetData.ContainsKey(header));
+            if (rowHeaderColumn == null)
+            {
+                Debug.WriteLine("Row header column not found in both files.");
+                return;
+            }
+
+            //Compare dictionary keys to find modified columns
+            var addedColumns = targetData.Keys.Except(sourceData.Keys);
+            var removedColumns = sourceData.Keys.Except(targetData.Keys);
+
+            // Pass the filename of the source file to the ShowColumnHeaderDifferencesBatch function
+            ShowColumnHeaderDifferencesBatch(addedColumns, removedColumns, "CSV", Path.GetFileName(sourcePath));
+
+            //Compare dictionary keys to find modified rows
+            var addedRowsTask = Task.Run(() => targetData[rowHeaderColumn].Except(sourceData[rowHeaderColumn]));
+            var removedRowsTask = Task.Run(() => sourceData[rowHeaderColumn].Except(targetData[rowHeaderColumn]));
+            var addedRows = addedRowsTask.Result;
+            var removedRows = GetRemovedRows(sourceData, targetData, rowHeaderColumn);
+            var allRemovedRows = GetListFromDictionary(removedRows);
+
+            Task.WaitAll(addedRowsTask, removedRowsTask);
+
+            // Pass the filename of the source file to the ShowRowHeaderDifferencesBatch function
+            ShowRowHeaderDifferencesBatch(addedRows.ToList(), allRemovedRows, "CSV", Path.GetFileName(sourcePath));
+
+            // Group changes by the row header
+            var groupedDifferences = GetGroupedDifferences(sourceData, targetData, allHeaders, rowHeaderColumn);
+
+            if (groupedDifferences.Any())
+            {
+                string formattedRtf = FormatRtfBatch(groupedDifferences, sourcePath, rowHeaderColumn);
+
+                // Append new data to existing RTF content
+                if (!string.IsNullOrEmpty(textValues.Rtf))
+                {
+                    textValues.Select(textValues.TextLength, 0);
+                    textValues.SelectedRtf = formattedRtf;
+                }
+                else
+                    textValues.Rtf = formattedRtf;
+            }
+            else
+            {
+                // Append text to existing content
+                textValues.SelectionColor = Color.DarkOrange;
+                textValues.SelectionFont = new Font(textValues.Font.FontFamily, 11, FontStyle.Bold);
+                textValues.AppendText(Environment.NewLine + Path.GetFileName(sourcePath));
+                textValues.SelectionColor = textValues.ForeColor;
+                textValues.SelectionFont = new Font(textValues.Font, FontStyle.Regular);
+                textValues.AppendText("\nNo differences found." + Environment.NewLine);
+            }  
         }
 
         //Parse CSV files from dropdown
@@ -252,6 +343,99 @@ namespace D2TxtCompare
             }
         }
 
+        private void ShowColumnHeaderDifferencesBatch(IEnumerable<string> addedColumns, IEnumerable<string> removedColumns, string fileType, string fileName)
+        {
+            // Check if there are no differences
+            if (!addedColumns.Any() && !removedColumns.Any())
+            {
+                textColumns.SelectionColor = Color.DarkOrange;
+                textColumns.SelectionFont = new Font(textColumns.Font.FontFamily, 11, FontStyle.Bold);
+                textColumns.AppendText(Environment.NewLine + fileName + Environment.NewLine);
+                textColumns.SelectionColor = textColumns.ForeColor;
+                textColumns.SelectionFont = new Font(textColumns.Font.FontFamily, 9, FontStyle.Regular);
+                textColumns.AppendText("No differences found." + Environment.NewLine);
+                return;
+            }
+
+            // Display filename in orange bold text
+            textColumns.SelectionColor = Color.DarkOrange;
+            textColumns.SelectionFont = new Font(textColumns.Font.FontFamily, 11, FontStyle.Bold);
+            textColumns.AppendText(Environment.NewLine + fileName + Environment.NewLine);
+
+            var changedHeaders = new List<string>();
+
+            // Identify added and removed columns to perform manual value fixes
+            foreach (var addedColumn in addedColumns.ToList())
+            {
+                foreach (var removedColumn in removedColumns.ToList())
+                {
+                    if (ApplyManualFixes(addedColumn, removedColumn, fileType))
+                    {
+                        var oldNewPair = $"{removedColumn} -> {addedColumn}";
+                        changedHeaders.Add(oldNewPair);
+                        addedColumns = addedColumns.Except(new[] { addedColumn });
+                        removedColumns = removedColumns.Except(new[] { removedColumn });
+                        break;
+                    }
+                }
+            }
+
+            // If the number of added/removed entries are the same, then they have been changed instead
+            if (addedColumns.Count() == removedColumns.Count())
+            {
+                var addedAndRemovedHeaders = addedColumns.Zip(removedColumns, (added, removed) => $"{removed} -> {added}");
+
+                foreach (var headerPair in addedAndRemovedHeaders)
+                {
+                    textColumns.SelectionColor = Color.MidnightBlue;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                    textColumns.AppendText($"Changed: ");
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                    textColumns.AppendText($"{headerPair}\n");
+                }
+
+                // Remove changed entries from addedColumns and removedColumns
+                addedColumns = addedColumns.Except(addedAndRemovedHeaders.Select(pair => pair.Split(" -> ")[1]));
+                removedColumns = removedColumns.Except(addedAndRemovedHeaders.Select(pair => pair.Split(" -> ")[0]));
+            }
+
+            // Show changed entries
+            foreach (var headerPair in changedHeaders)
+            {
+                textColumns.SelectionColor = Color.MidnightBlue;
+                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                textColumns.AppendText($"Changed: ");
+                textColumns.SelectionColor = textColumns.ForeColor;
+                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                textColumns.AppendText($"{headerPair}\n");
+            }
+
+            // Show added entries
+            foreach (var column in addedColumns)
+            {
+                textColumns.SelectionColor = Color.Green;
+                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                textColumns.AppendText($"Added: ");
+                textColumns.SelectionColor = textColumns.ForeColor;
+                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                textColumns.AppendText($"{column}\n");
+            }
+
+            // Show removed entries
+            foreach (var column in removedColumns)
+            {
+                textColumns.SelectionColor = Color.Red;
+                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                textColumns.AppendText($"Removed: ");
+                textColumns.SelectionColor = textColumns.ForeColor;
+                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                textColumns.AppendText($"{column}\n");
+            }
+        }
+
+
+
         private void ShowRowHeaderDifferences(IEnumerable<string> addedRows, IEnumerable<string> removedRows, string fileType)
         {
             textRows.Clear();
@@ -261,7 +445,7 @@ namespace D2TxtCompare
 
             var changedHeaders = new List<string>();
 
-            // Check for rows where the only difference is an asterisk or special conditions
+            // Gather files for manual fixes function
             foreach (var addedRow in addedRows)
             {
                 foreach (var removedRow in removedRows)
@@ -303,7 +487,7 @@ namespace D2TxtCompare
                 }
             }
 
-            // Show changed entries where the only difference is an asterisk or special conditions
+            // Show changed entries
             foreach (var headerPair in changedHeaders)
             {
                 textRows.SelectionColor = Color.MidnightBlue;
@@ -325,7 +509,108 @@ namespace D2TxtCompare
                 textRows.AppendText($"{row}\n");
             }
 
-            // Show removed entries individually
+            // Show removed entries
+            foreach (var removedRow in removedRows.Where(r => !processedRemovedRows.Contains(r)))
+            {
+                textRows.SelectionColor = Color.Red;
+                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                textRows.AppendText($"Removed: ");
+                textRows.SelectionColor = textRows.ForeColor;
+                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                textRows.AppendText($"{removedRow}\n");
+                processedRemovedRows.Add(removedRow); // Mark as processed
+            }
+        }
+
+        private void ShowRowHeaderDifferencesBatch(IEnumerable<string> addedRows, IEnumerable<string> removedRows, string fileType, string fileName)
+        {
+            // Check if there are no differences
+            if (!addedRows.Any() && !removedRows.Any())
+            {
+                textRows.SelectionColor = Color.DarkOrange;
+                textRows.SelectionFont = new Font(textRows.Font.FontFamily, 11, FontStyle.Bold);
+                textRows.AppendText(Environment.NewLine + fileName + Environment.NewLine);
+                textRows.SelectionColor = textRows.ForeColor;
+                textRows.SelectionFont = new Font(textRows.Font.FontFamily, 9, FontStyle.Regular);
+                textRows.AppendText("No differences found." + Environment.NewLine);
+                return;
+            }
+
+            // Display filename in orange bold text
+            textRows.SelectionColor = Color.DarkOrange;
+            textRows.SelectionFont = new Font(textRows.Font.FontFamily, 11, FontStyle.Bold);
+            textRows.AppendText(Environment.NewLine + fileName + Environment.NewLine);
+
+            var processedAddedRows = new HashSet<string>();
+            var processedRemovedRows = new HashSet<string>();
+
+            var changedHeaders = new List<string>();
+
+            // Gather files for manual fixes function
+            foreach (var addedRow in addedRows)
+            {
+                foreach (var removedRow in removedRows)
+                {
+                    if (!processedAddedRows.Contains(addedRow) && !processedRemovedRows.Contains(removedRow))
+                    {
+                        if (ApplyManualFixes(addedRow, removedRow, fileType))
+                        {
+                            var oldNewPair = $"{removedRow} -> {addedRow}";
+                            changedHeaders.Add(oldNewPair);
+                            processedAddedRows.Add(addedRow);
+                            processedRemovedRows.Add(removedRow);
+                        }
+                    }
+                }
+            }
+
+            // Show changed entries if the number of added and removed rows are the same
+            if (addedRows.Count() == removedRows.Count())
+            {
+                var addedAndRemovedHeaders = addedRows.Zip(removedRows, (added, removed) => $"{removed} -> {added}");
+
+                foreach (var headerPair in addedAndRemovedHeaders)
+                {
+                    textRows.SelectionColor = Color.MidnightBlue;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                    textRows.AppendText($"Changed: ");
+                    textRows.SelectionColor = textRows.ForeColor;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                    textRows.AppendText($"{headerPair}\n");
+                }
+
+                // Remove changed entries from processedAddedRows and processedRemovedRows
+                foreach (var pair in addedAndRemovedHeaders)
+                {
+                    var parts = pair.Split(" -> ");
+                    processedAddedRows.Add(parts[1]);
+                    processedRemovedRows.Add(parts[0]);
+                }
+            }
+
+            // Show changed entries
+            foreach (var headerPair in changedHeaders)
+            {
+                textRows.SelectionColor = Color.MidnightBlue;
+                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                textRows.AppendText($"Changed: ");
+                textRows.SelectionColor = textRows.ForeColor;
+                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                textRows.AppendText($"{headerPair}\n");
+            }
+
+            // Show added entries
+            foreach (var row in addedRows.Where(r => !processedAddedRows.Contains(r)))
+            {
+                textRows.SelectionColor = Color.Green;
+                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                textRows.AppendText($"Added: ");
+                textRows.SelectionColor = textRows.ForeColor;
+                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                textRows.AppendText($"{row}\n");
+            }
+
+            // Show removed entries
             foreach (var removedRow in removedRows.Where(r => !processedRemovedRows.Contains(r)))
             {
                 textRows.SelectionColor = Color.Red;
@@ -471,6 +756,46 @@ namespace D2TxtCompare
             return rtf;
         }
 
+        private string FormatRtfBatch(List<(string, List<string>)> groupedDifferences, string fileName, string columnHeader)
+        {
+            string rtf = @"{\rtf1\ansi\deff0{\colortbl ;\red255\green140\blue0;\red0\green0\blue128;\red255\green0\blue0;}\f0";
+            bool isFirstGroup = true; // Flag to track the first group
+
+            // Extract only the filename without the folder
+            string[] pathParts = fileName.Split('\\');
+            string shortFileName = pathParts[pathParts.Length - 1];
+
+            foreach (var kvp in groupedDifferences)
+            {
+                // Add a newline if it's not the first group
+                if (!isFirstGroup)
+                    rtf += "\\par ";
+
+                // Add filename with new lines before and after, but only after the first entry
+                if (isFirstGroup)
+                {
+                    rtf += "\\par ";
+                    rtf += $"{{\\cf1\\b\\fs22 {shortFileName}\\par}}"; // Dark orange, bold, 11px text for filename
+                }
+
+                rtf += $"{{\\cf2\\b {kvp.Item1}\\b0}}"; // Applying midnightblue color to the header
+                rtf += "\\cf0"; // Reset color to black
+
+                // List all differences for the current column 0 value
+                foreach (var diff in kvp.Item2)
+                {
+                    rtf += "\\par ";
+                    rtf += $"- {diff.Replace("<b>", @"\b ").Replace("</b>", @"\b0 ")}";
+                }
+
+                // Set the flag to false after the first group is processed
+                isFirstGroup = false;
+                rtf += "\\par "; // Add a blank line after each group
+            }
+            rtf += "}";
+            return rtf;
+        }
+
         #endregion
 
         #region Index Controls
@@ -481,7 +806,13 @@ namespace D2TxtCompare
             sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
             targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
             CompareFiles(sourceFolderPathC, targetFolderPathC);
-            textSearch.Text = "";
+
+            textSearch.Font = new Font(textSearch.Font.FontFamily, 10, FontStyle.Italic);
+            textSearch.ForeColor = SystemColors.WindowFrame;
+            textSearch.Text = "Search Term(s)";
+
+            textValues.Clear();
+            btnBatchLoad.ForeColor = Color.BurlyWood;
         }
 
         //User changed source folder location
@@ -584,7 +915,6 @@ namespace D2TxtCompare
                         dropTarget.Items.Add("Custom (Loaded)");
                 }
             }
-
 
             dropFiles.Items.Clear();
             PopulateComboBox(sourceFolderPath, targetFolderPath, dropFiles);
@@ -848,10 +1178,20 @@ namespace D2TxtCompare
             textSearch.Text = "";
             textSearch.Font = new Font(textSearch.Font.FontFamily, 9, FontStyle.Regular);
             textSearch.ForeColor = Color.Black;
-
         }
 
         #endregion
 
+        private void btnBatchLoad_Click(object sender, EventArgs e)
+        {
+            textValues.Clear();
+            textColumns.Clear();
+            textRows.Clear();
+            btnBatchLoad.ForeColor = Color.ForestGreen;
+            CompareFilesForFolder(sourceFolderPath, targetFolderPath);
+
+            labelStatus.Text = "";
+            labelStatus.Refresh();
+        }
     }
 }
