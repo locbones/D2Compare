@@ -49,6 +49,7 @@
             checkNewValues = new CheckBox();
             btnOpenSource = new Button();
             btnOpenTarget = new Button();
+            btnViewMode = new Button();
             SuspendLayout();
             // 
             // btnBatchLoad
@@ -267,12 +268,29 @@
             btnOpenTarget.UseVisualStyleBackColor = true;
             btnOpenTarget.Click += btnOpenTarget_Click;
             // 
+            // btnViewMode
+            // 
+            btnViewMode.BackColor = SystemColors.Control;
+            btnViewMode.BackgroundImage = Properties.Resources.modeLight;
+            btnViewMode.BackgroundImageLayout = ImageLayout.Stretch;
+            btnViewMode.FlatAppearance.BorderSize = 0;
+            btnViewMode.FlatStyle = FlatStyle.Flat;
+            btnViewMode.ForeColor = SystemColors.ControlText;
+            btnViewMode.Location = new Point(1295, 12);
+            btnViewMode.Name = "btnViewMode";
+            btnViewMode.Size = new Size(69, 33);
+            btnViewMode.TabIndex = 26;
+            btnViewMode.Tag = "Light";
+            btnViewMode.UseVisualStyleBackColor = false;
+            btnViewMode.Click += btnViewMode_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1376, 770);
+            Controls.Add(btnViewMode);
             Controls.Add(btnOpenTarget);
             Controls.Add(btnOpenSource);
             Controls.Add(checkNewValues);
@@ -322,5 +340,6 @@
         private CheckBox checkNewValues;
         private Button btnOpenSource;
         private Button btnOpenTarget;
+        private Button btnViewMode;
     }
 }

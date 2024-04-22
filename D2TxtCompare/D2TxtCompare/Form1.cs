@@ -1305,5 +1305,57 @@ namespace D2TxtCompare
             labelStatus.Text = "";
             labelStatus.Refresh();
         }
+
+        private void btnViewMode_Click(object sender, EventArgs e)
+        {
+            if (btnViewMode.Tag == "Light")
+            {
+                btnViewMode.BackgroundImage = Properties.Resources.modeDark;
+                btnViewMode.BackColor = Color.Black;
+                btnViewMode.FlatAppearance.MouseOverBackColor = Color.Black;
+                btnViewMode.Tag = "Dark";
+                this.BackColor = Color.Black;
+                labelSource.ForeColor = Color.BurlyWood;
+                labelTarget.ForeColor = Color.BurlyWood;
+                labelFiles.ForeColor = Color.BurlyWood;
+                checkNewValues.ForeColor = Color.BurlyWood;
+                labelColumns.ForeColor = Color.BurlyWood;
+                labelRows.ForeColor = Color.BurlyWood;
+                labelStatus.BackColor = Color.Black;
+                labelStatus.ForeColor = Color.BurlyWood;
+                labelSearch.ForeColor = Color.BurlyWood;
+                textFiles.BackColor = Color.DarkGray;
+                textColumns.BackColor = Color.DarkGray;
+                textRows.BackColor = Color.DarkGray;
+                textValues.BackColor = Color.DarkGray;
+                dropSource.BackColor = Color.DarkGray;
+                dropTarget.BackColor = Color.DarkGray;
+                dropFiles.BackColor = Color.DarkGray;
+            }
+            else if (btnViewMode.Tag == "Dark")
+            {
+                btnViewMode.BackgroundImage = Properties.Resources.modeLight;
+                btnViewMode.BackColor = SystemColors.Control;
+                btnViewMode.FlatAppearance.MouseOverBackColor = SystemColors.Control;
+                btnViewMode.Tag = "Light";
+                this.BackColor = SystemColors.Control;
+                labelSource.ForeColor = SystemColors.ControlText;
+                labelTarget.ForeColor = SystemColors.ControlText;
+                labelFiles.ForeColor = SystemColors.ControlText;
+                checkNewValues.ForeColor = SystemColors.ControlText;
+                labelColumns.ForeColor = SystemColors.ControlText;
+                labelRows.ForeColor = SystemColors.ControlText;
+                labelStatus.BackColor = SystemColors.Control;
+                labelStatus.ForeColor = SystemColors.ControlText;
+                labelSearch.ForeColor = SystemColors.ControlText;
+                textFiles.BackColor = SystemColors.Control;
+                textColumns.BackColor = SystemColors.Control;
+                textRows.BackColor = SystemColors.Control;
+                textValues.BackColor = SystemColors.Control;
+                dropSource.BackColor = SystemColors.Control;
+                dropTarget.BackColor = SystemColors.Control;
+                dropFiles.BackColor = SystemColors.Control;
+            }
+        }
     }
 }
