@@ -1081,22 +1081,38 @@ namespace D2TxtCompare
             {
                 if (sourceFolderPath.Length > 0)
                 {
-                    checkNewValues.Checked = true;
                     checkNewValues.Text = "Now processing the current file...";
                     this.Refresh();
-                    if (String.IsNullOrEmpty(targetFolderPathC))
-                    {
-                        CompareFiles(sourceFolderPathC, targetFolderPathC);
-                        checkNewValues.Text = "Include new rows in value breakdown (Significant increase in process time)";
-                        this.Refresh();
-                    }
+
+                    textValues.Clear();
+                    sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
+                    targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
+                    CompareFiles(sourceFolderPathC, targetFolderPathC);
+
+                    textSearch.Font = new Font(textSearch.Font.FontFamily, 10, FontStyle.Italic);
+                    textSearch.ForeColor = SystemColors.WindowFrame;
+                    textSearch.Text = "Search Term(s)";
+                    btnBatchLoad.ForeColor = Color.BurlyWood;
+
+
+                    //CompareFiles(sourceFolderPathC, targetFolderPathC);
+                    checkNewValues.Text = "Include new rows in value breakdown (Significant increase in process time)";
+                    this.Refresh();
                 }
             }
             else
+                if (sourceFolderPath.Length > 0)
             {
-                checkNewValues.Checked = false;
-                if (String.IsNullOrEmpty(targetFolderPathC))
-                    CompareFiles(sourceFolderPathC, targetFolderPathC);
+
+                textValues.Clear();
+                sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
+                targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
+                CompareFiles(sourceFolderPathC, targetFolderPathC);
+
+                textSearch.Font = new Font(textSearch.Font.FontFamily, 10, FontStyle.Italic);
+                textSearch.ForeColor = SystemColors.WindowFrame;
+                textSearch.Text = "Search Term(s)";
+                btnBatchLoad.ForeColor = Color.BurlyWood;
             }
 
         }

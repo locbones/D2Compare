@@ -59,7 +59,7 @@
             btnBatchLoad.FlatStyle = FlatStyle.Flat;
             btnBatchLoad.Font = new Font("Arial", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnBatchLoad.ForeColor = Color.BurlyWood;
-            btnBatchLoad.Location = new Point(598, 141);
+            btnBatchLoad.Location = new Point(447, 207);
             btnBatchLoad.Name = "btnBatchLoad";
             btnBatchLoad.Size = new Size(130, 39);
             btnBatchLoad.TabIndex = 1;
@@ -71,7 +71,7 @@
             // 
             dropSource.FormattingEnabled = true;
             dropSource.Items.AddRange(new object[] { "Legacy (1.13c+)", "1.0.0.0 (62115)", "1.4.0.0 (64954)", "2.2.0.0 (65890)", "2.3.0.0 (67314)", "2.3.0.1 (67358)", "2.3.1.0 (67554)", "2.4.1.1 (68992)", "2.4.1.2 (69270)", "2.4.3.0 (70161)", "2.5.0.0 (71336)", "2.5.1.0 (71510)", "2.5.2.0 (71776)", "2.6.0.0 (73090)", "2.7.2.0 (77312)", "Custom" });
-            dropSource.Location = new Point(526, 29);
+            dropSource.Location = new Point(375, 54);
             dropSource.Name = "dropSource";
             dropSource.Size = new Size(130, 23);
             dropSource.TabIndex = 2;
@@ -81,7 +81,7 @@
             // 
             dropTarget.FormattingEnabled = true;
             dropTarget.Items.AddRange(new object[] { "Legacy (1.13c+)", "1.0.0.0 (62115)", "1.4.0.0 (64954)", "2.2.0.0 (65890)", "2.3.0.0 (67314)", "2.3.0.1 (67358)", "2.3.1.0 (67554)", "2.4.1.1 (68992)", "2.4.1.2 (69270)", "2.4.3.0 (70161)", "2.5.0.0 (71336)", "2.5.1.0 (71510)", "2.5.2.0 (71776)", "2.6.0.0 (73090)", "2.7.2.0 (77312)", "Custom" });
-            dropTarget.Location = new Point(667, 29);
+            dropTarget.Location = new Point(516, 54);
             dropTarget.Name = "dropTarget";
             dropTarget.Size = new Size(130, 23);
             dropTarget.TabIndex = 3;
@@ -89,7 +89,7 @@
             // 
             // labelSource
             // 
-            labelSource.Location = new Point(526, 4);
+            labelSource.Location = new Point(375, 29);
             labelSource.Name = "labelSource";
             labelSource.Size = new Size(128, 23);
             labelSource.TabIndex = 4;
@@ -98,7 +98,7 @@
             // 
             // labelTarget
             // 
-            labelTarget.Location = new Point(667, 4);
+            labelTarget.Location = new Point(516, 29);
             labelTarget.Name = "labelTarget";
             labelTarget.Size = new Size(130, 23);
             labelTarget.TabIndex = 5;
@@ -107,7 +107,7 @@
             // 
             // textColumns
             // 
-            textColumns.Location = new Point(6, 512);
+            textColumns.Location = new Point(5, 340);
             textColumns.Name = "textColumns";
             textColumns.Size = new Size(349, 421);
             textColumns.TabIndex = 6;
@@ -115,7 +115,7 @@
             // 
             // textRows
             // 
-            textRows.Location = new Point(361, 512);
+            textRows.Location = new Point(360, 340);
             textRows.Name = "textRows";
             textRows.Size = new Size(382, 421);
             textRows.TabIndex = 7;
@@ -123,7 +123,7 @@
             // 
             // textValues
             // 
-            textValues.Location = new Point(749, 512);
+            textValues.Location = new Point(748, 340);
             textValues.Name = "textValues";
             textValues.Size = new Size(622, 421);
             textValues.TabIndex = 8;
@@ -131,7 +131,7 @@
             // 
             // labelColumns
             // 
-            labelColumns.Location = new Point(6, 485);
+            labelColumns.Location = new Point(5, 313);
             labelColumns.Name = "labelColumns";
             labelColumns.Size = new Size(349, 24);
             labelColumns.TabIndex = 9;
@@ -140,7 +140,7 @@
             // 
             // labelRows
             // 
-            labelRows.Location = new Point(361, 485);
+            labelRows.Location = new Point(360, 313);
             labelRows.Name = "labelRows";
             labelRows.Size = new Size(382, 24);
             labelRows.TabIndex = 10;
@@ -150,7 +150,7 @@
             // dropFiles
             // 
             dropFiles.FormattingEnabled = true;
-            dropFiles.Location = new Point(598, 81);
+            dropFiles.Location = new Point(447, 106);
             dropFiles.Name = "dropFiles";
             dropFiles.Size = new Size(130, 23);
             dropFiles.TabIndex = 12;
@@ -158,7 +158,7 @@
             // 
             // labelFiles
             // 
-            labelFiles.Location = new Point(598, 56);
+            labelFiles.Location = new Point(447, 81);
             labelFiles.Name = "labelFiles";
             labelFiles.Size = new Size(130, 23);
             labelFiles.TabIndex = 13;
@@ -169,7 +169,7 @@
             // 
             textSearch.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point);
             textSearch.ForeColor = SystemColors.WindowFrame;
-            textSearch.Location = new Point(1011, 464);
+            textSearch.Location = new Point(1010, 292);
             textSearch.Name = "textSearch";
             textSearch.Size = new Size(100, 25);
             textSearch.TabIndex = 14;
@@ -186,7 +186,7 @@
             btnPrev.FlatAppearance.BorderSize = 0;
             btnPrev.FlatStyle = FlatStyle.Flat;
             btnPrev.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnPrev.Location = new Point(982, 465);
+            btnPrev.Location = new Point(981, 293);
             btnPrev.Name = "btnPrev";
             btnPrev.Size = new Size(23, 21);
             btnPrev.TabIndex = 15;
@@ -201,7 +201,7 @@
             btnNext.FlatAppearance.BorderSize = 0;
             btnNext.FlatStyle = FlatStyle.Flat;
             btnNext.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnNext.Location = new Point(1117, 465);
+            btnNext.Location = new Point(1116, 293);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(23, 21);
             btnNext.TabIndex = 16;
@@ -210,7 +210,7 @@
             // 
             // labelSearch
             // 
-            labelSearch.Location = new Point(749, 492);
+            labelSearch.Location = new Point(748, 320);
             labelSearch.Name = "labelSearch";
             labelSearch.Size = new Size(622, 20);
             labelSearch.TabIndex = 17;
@@ -219,7 +219,7 @@
             // 
             // textFiles
             // 
-            textFiles.Location = new Point(526, 225);
+            textFiles.Location = new Point(713, 28);
             textFiles.Name = "textFiles";
             textFiles.Size = new Size(271, 220);
             textFiles.TabIndex = 19;
@@ -230,7 +230,7 @@
             labelStatus.BackColor = SystemColors.Control;
             labelStatus.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             labelStatus.ForeColor = Color.Black;
-            labelStatus.Location = new Point(526, 448);
+            labelStatus.Location = new Point(713, 251);
             labelStatus.Name = "labelStatus";
             labelStatus.Size = new Size(271, 20);
             labelStatus.TabIndex = 20;
@@ -238,7 +238,7 @@
             // 
             // checkNewValues
             // 
-            checkNewValues.Location = new Point(551, 184);
+            checkNewValues.Location = new Point(402, 163);
             checkNewValues.Name = "checkNewValues";
             checkNewValues.Size = new Size(228, 38);
             checkNewValues.TabIndex = 21;
@@ -249,7 +249,7 @@
             // 
             // btnOpenSource
             // 
-            btnOpenSource.Location = new Point(528, 109);
+            btnOpenSource.Location = new Point(377, 134);
             btnOpenSource.Name = "btnOpenSource";
             btnOpenSource.Size = new Size(128, 23);
             btnOpenSource.TabIndex = 22;
@@ -259,7 +259,7 @@
             // 
             // btnOpenTarget
             // 
-            btnOpenTarget.Location = new Point(667, 109);
+            btnOpenTarget.Location = new Point(516, 134);
             btnOpenTarget.Name = "btnOpenTarget";
             btnOpenTarget.Size = new Size(130, 23);
             btnOpenTarget.TabIndex = 23;
@@ -272,7 +272,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1376, 939);
+            ClientSize = new Size(1376, 764);
             Controls.Add(btnOpenTarget);
             Controls.Add(btnOpenSource);
             Controls.Add(checkNewValues);
