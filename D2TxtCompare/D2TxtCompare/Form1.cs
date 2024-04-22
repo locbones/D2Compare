@@ -14,7 +14,7 @@ namespace D2TxtCompare
         string targetFolderPath = "";
         string sourceFolderPathC = "";
         string targetFolderPathC = "";
-        string appVersion = "1.0.1";
+        string appVersion = "1.0.2";
 
         public Form1()
         {
@@ -344,12 +344,24 @@ namespace D2TxtCompare
 
                 foreach (var headerPair in addedAndRemovedHeaders)
                 {
-                    textColumns.SelectionColor = Color.MidnightBlue;
-                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
-                    textColumns.AppendText($"Changed: ");
-                    textColumns.SelectionColor = textColumns.ForeColor;
-                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
-                    textColumns.AppendText($"{headerPair}\n");
+                    if (btnViewMode.Tag == "Light")
+                    {
+                        textColumns.SelectionColor = Color.MidnightBlue;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                        textColumns.AppendText($"Changed: ");
+                        textColumns.SelectionColor = textColumns.ForeColor;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                        textColumns.AppendText($"{headerPair}\n");
+                    }
+                    else
+                    {
+                        textColumns.SelectionColor = Color.RoyalBlue;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                        textColumns.AppendText($"Changed: ");
+                        textColumns.SelectionColor = Color.Gainsboro;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                        textColumns.AppendText($"{headerPair}\n");
+                    }
                 }
 
                 // Remove changed entries from addedColumns and removedColumns
@@ -360,12 +372,25 @@ namespace D2TxtCompare
             // Show changed entries
             foreach (var headerPair in changedHeaders)
             {
-                textColumns.SelectionColor = Color.MidnightBlue;
-                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
-                textColumns.AppendText($"Changed: ");
-                textColumns.SelectionColor = textColumns.ForeColor;
-                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
-                textColumns.AppendText($"{headerPair}\n");
+                if (btnViewMode.Tag == "Light")
+                {
+                    textColumns.SelectionColor = Color.MidnightBlue;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                    textColumns.AppendText($"Changed: ");
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                    textColumns.AppendText($"{headerPair}\n");
+                }
+                else
+                {
+                    textColumns.SelectionColor = Color.RoyalBlue;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                    textColumns.AppendText($"Changed: ");
+                    textColumns.SelectionColor = Color.Gainsboro;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                    textColumns.AppendText($"{headerPair}\n");
+                }
+                    
             }
 
             // Show added entries
@@ -374,7 +399,10 @@ namespace D2TxtCompare
                 textColumns.SelectionColor = Color.Green;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
                 textColumns.AppendText($"Added: ");
-                textColumns.SelectionColor = textColumns.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                else if (btnViewMode.Tag == "Dark")
+                    textColumns.SelectionColor = Color.Gainsboro;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
                 textColumns.AppendText($"{column}\n");
             }
@@ -385,7 +413,10 @@ namespace D2TxtCompare
                 textColumns.SelectionColor = Color.Red;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
                 textColumns.AppendText($"Removed: ");
-                textColumns.SelectionColor = textColumns.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                else
+                    textColumns.SelectionColor = Color.Gainsboro;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
                 textColumns.AppendText($"{column}\n");
             }
@@ -399,7 +430,10 @@ namespace D2TxtCompare
                 textColumns.SelectionColor = Color.DarkOrange;
                 textColumns.SelectionFont = new Font(textColumns.Font.FontFamily, 11, FontStyle.Bold);
                 textColumns.AppendText(Environment.NewLine + fileName + Environment.NewLine);
-                textColumns.SelectionColor = textColumns.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                else
+                    textColumns.SelectionColor = Color.Gainsboro;
                 textColumns.SelectionFont = new Font(textColumns.Font.FontFamily, 9, FontStyle.Regular);
                 textColumns.AppendText("No differences found." + Environment.NewLine);
                 return;
@@ -435,12 +469,24 @@ namespace D2TxtCompare
 
                 foreach (var headerPair in addedAndRemovedHeaders)
                 {
-                    textColumns.SelectionColor = Color.MidnightBlue;
-                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
-                    textColumns.AppendText($"Changed: ");
-                    textColumns.SelectionColor = textColumns.ForeColor;
-                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
-                    textColumns.AppendText($"{headerPair}\n");
+                    if (btnViewMode.Tag == "Light")
+                    {
+                        textColumns.SelectionColor = Color.MidnightBlue;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                        textColumns.AppendText($"Changed: ");
+                        textColumns.SelectionColor = textColumns.ForeColor;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                        textColumns.AppendText($"{headerPair}\n");
+                    }
+                    else
+                    {
+                        textColumns.SelectionColor = Color.RoyalBlue;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                        textColumns.AppendText($"Changed: ");
+                        textColumns.SelectionColor = Color.Gainsboro;
+                        textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                        textColumns.AppendText($"{headerPair}\n");
+                    }
                 }
 
                 // Remove changed entries from addedColumns and removedColumns
@@ -451,12 +497,24 @@ namespace D2TxtCompare
             // Show changed entries
             foreach (var headerPair in changedHeaders)
             {
-                textColumns.SelectionColor = Color.MidnightBlue;
-                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
-                textColumns.AppendText($"Changed: ");
-                textColumns.SelectionColor = textColumns.ForeColor;
-                textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
-                textColumns.AppendText($"{headerPair}\n");
+                if (btnViewMode.Tag == "Light")
+                {
+                    textColumns.SelectionColor = Color.MidnightBlue;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                    textColumns.AppendText($"Changed: ");
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                    textColumns.AppendText($"{headerPair}\n");
+                }
+                else
+                {
+                    textColumns.SelectionColor = Color.RoyalBlue;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
+                    textColumns.AppendText($"Changed: ");
+                    textColumns.SelectionColor = Color.Gainsboro;
+                    textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
+                    textColumns.AppendText($"{headerPair}\n");
+                }
             }
 
             // Show added entries
@@ -465,7 +523,10 @@ namespace D2TxtCompare
                 textColumns.SelectionColor = Color.Green;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
                 textColumns.AppendText($"Added: ");
-                textColumns.SelectionColor = textColumns.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                else
+                    textColumns.SelectionColor = Color.Gainsboro;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
                 textColumns.AppendText($"{column}\n");
             }
@@ -476,7 +537,10 @@ namespace D2TxtCompare
                 textColumns.SelectionColor = Color.Red;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Bold);
                 textColumns.AppendText($"Removed: ");
-                textColumns.SelectionColor = textColumns.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textColumns.SelectionColor = textColumns.ForeColor;
+                else
+                    textColumns.SelectionColor = Color.Gainsboro;
                 textColumns.SelectionFont = new Font(textColumns.Font, FontStyle.Regular);
                 textColumns.AppendText($"{column}\n");
             }
@@ -518,12 +582,24 @@ namespace D2TxtCompare
 
                 foreach (var headerPair in addedAndRemovedHeaders)
                 {
-                    textRows.SelectionColor = Color.MidnightBlue;
-                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
-                    textRows.AppendText($"Changed: ");
-                    textRows.SelectionColor = textRows.ForeColor;
-                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
-                    textRows.AppendText($"{headerPair}\n");
+                    if (btnViewMode.Tag == "Light")
+                    {
+                        textRows.SelectionColor = Color.MidnightBlue;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                        textRows.AppendText($"Changed: ");
+                        textRows.SelectionColor = textRows.ForeColor;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                        textRows.AppendText($"{headerPair}\n");
+                    }
+                    else
+                    {
+                        textRows.SelectionColor = Color.RoyalBlue;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                        textRows.AppendText($"Changed: ");
+                        textRows.SelectionColor = Color.Gainsboro;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                        textRows.AppendText($"{headerPair}\n");
+                    }
                 }
 
                 // Remove changed entries from processedAddedRows and processedRemovedRows
@@ -538,12 +614,24 @@ namespace D2TxtCompare
             // Show changed entries
             foreach (var headerPair in changedHeaders)
             {
-                textRows.SelectionColor = Color.MidnightBlue;
-                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
-                textRows.AppendText($"Changed: ");
-                textRows.SelectionColor = textRows.ForeColor;
-                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
-                textRows.AppendText($"{headerPair}\n");
+                if (btnViewMode.Tag == "Light")
+                {
+                    textRows.SelectionColor = Color.MidnightBlue;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                    textRows.AppendText($"Changed: ");
+                    textRows.SelectionColor = textRows.ForeColor;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                    textRows.AppendText($"{headerPair}\n");
+                }
+                else
+                {
+                    textRows.SelectionColor = Color.RoyalBlue;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                    textRows.AppendText($"Changed: ");
+                    textRows.SelectionColor = Color.Gainsboro;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                    textRows.AppendText($"{headerPair}\n");
+                }
             }
 
             // Show added entries
@@ -552,7 +640,10 @@ namespace D2TxtCompare
                 textRows.SelectionColor = Color.Green;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
                 textRows.AppendText($"Added: ");
-                textRows.SelectionColor = textRows.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textRows.SelectionColor = textRows.ForeColor;
+                else
+                    textRows.SelectionColor = Color.Gainsboro;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
                 textRows.AppendText($"{row}\n");
             }
@@ -563,7 +654,10 @@ namespace D2TxtCompare
                 textRows.SelectionColor = Color.Red;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
                 textRows.AppendText($"Removed: ");
-                textRows.SelectionColor = textRows.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textRows.SelectionColor = textRows.ForeColor;
+                else
+                    textRows.SelectionColor = Color.Gainsboro;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
                 textRows.AppendText($"{removedRow}\n");
                 processedRemovedRows.Add(removedRow); // Mark as processed
@@ -575,10 +669,14 @@ namespace D2TxtCompare
             // Check if there are no differences
             if (!addedRows.Any() && !removedRows.Any())
             {
+                
                 textRows.SelectionColor = Color.DarkOrange;
                 textRows.SelectionFont = new Font(textRows.Font.FontFamily, 11, FontStyle.Bold);
                 textRows.AppendText(Environment.NewLine + fileName + Environment.NewLine);
-                textRows.SelectionColor = textRows.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textRows.SelectionColor = textRows.ForeColor;
+                else
+                    textRows.SelectionColor = Color.Gainsboro;
                 textRows.SelectionFont = new Font(textRows.Font.FontFamily, 9, FontStyle.Regular);
                 textRows.AppendText("No differences found." + Environment.NewLine);
                 return;
@@ -619,12 +717,24 @@ namespace D2TxtCompare
 
                 foreach (var headerPair in addedAndRemovedHeaders)
                 {
-                    textRows.SelectionColor = Color.MidnightBlue;
-                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
-                    textRows.AppendText($"Changed: ");
-                    textRows.SelectionColor = textRows.ForeColor;
-                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
-                    textRows.AppendText($"{headerPair}\n");
+                    if (btnViewMode.Tag == "Light")
+                    {
+                        textRows.SelectionColor = Color.MidnightBlue;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                        textRows.AppendText($"Changed: ");
+                        textRows.SelectionColor = textRows.ForeColor;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                        textRows.AppendText($"{headerPair}\n");
+                    }
+                    else
+                    {
+                        textRows.SelectionColor = Color.RoyalBlue;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                        textRows.AppendText($"Changed: ");
+                        textRows.SelectionColor = Color.Gainsboro;
+                        textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                        textRows.AppendText($"{headerPair}\n");
+                    }
                 }
 
                 // Remove changed entries from processedAddedRows and processedRemovedRows
@@ -639,12 +749,24 @@ namespace D2TxtCompare
             // Show changed entries
             foreach (var headerPair in changedHeaders)
             {
-                textRows.SelectionColor = Color.MidnightBlue;
-                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
-                textRows.AppendText($"Changed: ");
-                textRows.SelectionColor = textRows.ForeColor;
-                textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
-                textRows.AppendText($"{headerPair}\n");
+                if (btnViewMode.Tag == "Light")
+                {
+                    textRows.SelectionColor = Color.MidnightBlue;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                    textRows.AppendText($"Changed: ");
+                    textRows.SelectionColor = textRows.ForeColor;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                    textRows.AppendText($"{headerPair}\n");
+                }
+                else
+                {
+                    textRows.SelectionColor = Color.RoyalBlue;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
+                    textRows.AppendText($"Changed: ");
+                    textRows.SelectionColor = Color.Gainsboro;
+                    textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
+                    textRows.AppendText($"{headerPair}\n");
+                }
             }
 
             // Show added entries
@@ -653,7 +775,10 @@ namespace D2TxtCompare
                 textRows.SelectionColor = Color.Green;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
                 textRows.AppendText($"Added: ");
-                textRows.SelectionColor = textRows.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textRows.SelectionColor = textRows.ForeColor;
+                else
+                    textRows.SelectionColor = Color.Gainsboro;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
                 textRows.AppendText($"{row}\n");
             }
@@ -664,7 +789,10 @@ namespace D2TxtCompare
                 textRows.SelectionColor = Color.Red;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Bold);
                 textRows.AppendText($"Removed: ");
-                textRows.SelectionColor = textRows.ForeColor;
+                if (btnViewMode.Tag == "Light")
+                    textRows.SelectionColor = textRows.ForeColor;
+                else
+                    textRows.SelectionColor = Color.Gainsboro;
                 textRows.SelectionFont = new Font(textRows.Font, FontStyle.Regular);
                 textRows.AppendText($"{removedRow}\n");
                 processedRemovedRows.Add(removedRow); // Mark as processed
@@ -777,7 +905,13 @@ namespace D2TxtCompare
         //Apply Color and Font formatting to outputs
         private string FormatRtf(List<(string, List<string>)> groupedDifferences, string fileName)
         {
-            string rtf = @"{\rtf1\ansi\deff0{\colortbl ;\red0\green0\blue128;}\f0";
+            string rtf = "";
+
+            if (btnViewMode.Tag == "Light")
+                rtf = @"{\rtf1\ansi\deff0{\colortbl ;\red0\green0\blue128;\red220\green220\blue220;}\f0"; // Midnight Blue and Gainsboro colors
+            else
+                rtf = @"{\rtf1\ansi\deff0{\colortbl ;\red65\green105\blue225;\red220\green220\blue220;}\f0"; // Royal Blue and Gainsboro colors
+
             bool isFirstGroup = true; // Flag to track the first group
 
             foreach (var kvp in groupedDifferences)
@@ -786,8 +920,16 @@ namespace D2TxtCompare
                 if (!isFirstGroup)
                     rtf += "\\par ";
 
-                rtf += $"{{\\cf1\\b {kvp.Item1}\\b0}}"; // Applying midnightblue color to the header
-                rtf += "\\cf0"; // Reset color to black
+                // Applying color to the header
+                if (btnViewMode.Tag == "Light")
+                    rtf += $"{{\\cf1\\b {kvp.Item1}\\b0}}"; // Midnight Blue color
+                else
+                    rtf += $"{{\\cf1\\b {kvp.Item1}\\b0}}"; // Royal Blue color
+
+                if (btnViewMode.Tag == "Light")
+                    rtf += "\\cf0"; // Set text color to Black
+                else
+                    rtf += "\\cf2"; // Set text color to Gainsboro
 
                 // List all differences for the current column 0 value
                 foreach (var diff in kvp.Item2)
@@ -803,6 +945,8 @@ namespace D2TxtCompare
             rtf += "}";
             return rtf;
         }
+
+
 
         private string FormatRtfBatch(List<(string, List<string>)> groupedDifferences, string fileName, string columnHeader)
         {
@@ -1050,7 +1194,7 @@ namespace D2TxtCompare
 
                 // Set the initial font and color
                 richTextBox.SelectionFont = new Font(richTextBox.Font, FontStyle.Regular);
-                richTextBox.SelectionColor = richTextBox.ForeColor;
+                richTextBox.ForeColor = richTextBox.ForeColor; // Reset to default color
 
                 // Removed Files
                 foreach (string fileName in filesOnlyInSource)
@@ -1058,7 +1202,10 @@ namespace D2TxtCompare
                     richTextBox.SelectionColor = Color.Red;
                     richTextBox.SelectionFont = new Font(richTextBox.Font, FontStyle.Bold);
                     richTextBox.AppendText($"Removed: ");
-                    richTextBox.SelectionColor = richTextBox.ForeColor;
+                    if (btnViewMode.Tag == "Light")
+                        richTextBox.SelectionColor = Color.Black;
+                    else
+                        richTextBox.SelectionColor = Color.Gainsboro;
                     richTextBox.SelectionFont = new Font(richTextBox.Font, FontStyle.Regular);
                     richTextBox.AppendText(fileName + Environment.NewLine);
                 }
@@ -1069,12 +1216,17 @@ namespace D2TxtCompare
                     richTextBox.SelectionColor = Color.Green;
                     richTextBox.SelectionFont = new Font(richTextBox.Font, FontStyle.Bold);
                     richTextBox.AppendText($"Added: ");
-                    richTextBox.SelectionColor = richTextBox.ForeColor;
+                    if (btnViewMode.Tag == "Light")
+                        richTextBox.SelectionColor = Color.Black;
+                    else
+                        richTextBox.SelectionColor = Color.Gainsboro;
                     richTextBox.SelectionFont = new Font(richTextBox.Font, FontStyle.Regular);
                     richTextBox.AppendText(fileName + Environment.NewLine);
                 }
             }
         }
+
+
 
         //User included new rows in value breakdown
         private void checkNewValues_CheckedChanged(object sender, EventArgs e)
@@ -1326,13 +1478,25 @@ namespace D2TxtCompare
                 labelStatus.BackColor = Color.Black;
                 labelStatus.ForeColor = Color.BurlyWood;
                 labelSearch.ForeColor = Color.BurlyWood;
-                textFiles.BackColor = Color.DarkGray;
-                textColumns.BackColor = Color.DarkGray;
-                textRows.BackColor = Color.DarkGray;
-                textValues.BackColor = Color.DarkGray;
+                textFiles.BackColor = Color.Black;
+                textColumns.BackColor = Color.Black;
+                textRows.BackColor = Color.Black;
+                textValues.BackColor = Color.Black;
                 dropSource.BackColor = Color.DarkGray;
                 dropTarget.BackColor = Color.DarkGray;
                 dropFiles.BackColor = Color.DarkGray;
+
+                textValues.Clear();
+                sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
+                targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
+                CompareFiles(sourceFolderPathC, targetFolderPathC);
+                textFiles.Clear();
+                UpdateRichTextBox(sourceFolderPath, targetFolderPath, textFiles);
+
+                textSearch.Font = new Font(textSearch.Font.FontFamily, 10, FontStyle.Italic);
+                textSearch.ForeColor = SystemColors.WindowFrame;
+                textSearch.Text = "Search Term(s)";
+                btnBatchLoad.ForeColor = Color.BurlyWood;
             }
             else if (btnViewMode.Tag == "Dark")
             {
@@ -1357,6 +1521,18 @@ namespace D2TxtCompare
                 dropSource.BackColor = SystemColors.Control;
                 dropTarget.BackColor = SystemColors.Control;
                 dropFiles.BackColor = SystemColors.Control;
+
+                textValues.Clear();
+                sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
+                targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
+                CompareFiles(sourceFolderPathC, targetFolderPathC);
+                textFiles.Clear();
+                UpdateRichTextBox(sourceFolderPath, targetFolderPath, textFiles);
+
+                textSearch.Font = new Font(textSearch.Font.FontFamily, 10, FontStyle.Italic);
+                textSearch.ForeColor = SystemColors.WindowFrame;
+                textSearch.Text = "Search Term(s)";
+                btnBatchLoad.ForeColor = Color.BurlyWood;
             }
         }
     }
