@@ -157,7 +157,7 @@ namespace D2TxtCompare
                 textValues.SelectionColor = textValues.ForeColor;
                 textValues.SelectionFont = new Font(textValues.Font, FontStyle.Regular);
                 textValues.AppendText("\nNo differences found." + Environment.NewLine);
-            }  
+            }
         }
 
         //Parse CSV files from dropdown
@@ -218,30 +218,72 @@ namespace D2TxtCompare
             return list;
         }
 
-        //Apply parallel task to analyze and output grouped differences for row changes
         private List<(string, List<string>)> GetGroupedDifferences(Dictionary<string, List<string>> file1Data, Dictionary<string, List<string>> file2Data, HashSet<string> allHeaders, string rowHeaderColumn)
         {
             var groupedDifferences = new Dictionary<string, List<(string, string)>>();
 
-            Parallel.ForEach(allHeaders, header =>
+            // Collect all row headers from both files
+            var allRowHeaders = new HashSet<string>(file1Data[rowHeaderColumn]);
+            allRowHeaders.UnionWith(file2Data[rowHeaderColumn]);
+
+            Parallel.ForEach(allRowHeaders, rowHeader =>
             {
-                if (!file1Data.ContainsKey(header) || !file2Data.ContainsKey(header))
-                    return;
+                // Check if the row exists in both files
+                bool inFile1 = file1Data[rowHeaderColumn].Contains(rowHeader);
+                bool inFile2 = file2Data[rowHeaderColumn].Contains(rowHeader);
 
-                var file1Column = file1Data[header];
-                var file2Column = file2Data[header];
-
-                int minLength = Math.Min(file1Column.Count, file2Column.Count);
-                for (int i = 0; i < minLength; i++)
+                if (inFile1 && inFile2)
                 {
-                    if (file1Column[i] != file2Column[i])
+                    // Row exists in both files, compare columns
+                    foreach (var header in allHeaders)
                     {
-                        string rowHeader = file2Data[rowHeaderColumn][i];
-                        string valueDifference = $"<b>{header}</b>: '{file1Column[i]}' -> '{file2Column[i]}'";
-                        string column0Value = $"{file2Data[rowHeaderColumn][i]} (Row {i + 1})";
+                        if (!file1Data.ContainsKey(header) || !file2Data.ContainsKey(header))
+                            continue;
+
+                        int index1 = file1Data[rowHeaderColumn].IndexOf(rowHeader);
+                        int index2 = file2Data[rowHeaderColumn].IndexOf(rowHeader);
+
+                        if (index1 == -1 || index2 == -1)
+                            continue;
+
+                        var value1 = file1Data[header][index1];
+                        var value2 = file2Data[header][index2];
+
+                        if (value1 != value2)
+                        {
+                            string valueDifference = $"<b>{header}</b>: '{value1}' -> '{value2}'";
+                            string column0Value = $"{rowHeader} (Row {Math.Min(index1, index2) + 1})";
+                            int columnIndex = allHeaders.ToList().IndexOf(header);
+
+                            lock (groupedDifferences)
+                            {
+                                if (!groupedDifferences.ContainsKey(column0Value))
+                                    groupedDifferences[column0Value] = new List<(string, string)>();
+
+                                groupedDifferences[column0Value].Add((valueDifference, columnIndex.ToString()));
+                            }
+                        }
+                    }
+                }
+                else if (checkNewValues.Checked == true && !inFile1) // Check if the row exists only in the target file
+                {
+                    // Row exists only in the target file, consider it as an added row
+                    foreach (var header in allHeaders)
+                    {
+                        if (!file2Data.ContainsKey(header))
+                            continue;
+
+                        int index2 = file2Data[rowHeaderColumn].IndexOf(rowHeader);
+
+                        if (index2 == -1)
+                            continue;
+
+                        var value2 = file2Data[header][index2];
+
+                        string valueDifference = $"<b>{header}</b>: 'N/A' -> '{value2}'";
+                        string column0Value = $"{rowHeader} (Row {index2 + 1})";
                         int columnIndex = allHeaders.ToList().IndexOf(header);
 
-                        //Group all changes under the Column 0 value
                         lock (groupedDifferences)
                         {
                             if (!groupedDifferences.ContainsKey(column0Value))
@@ -262,6 +304,10 @@ namespace D2TxtCompare
                                                   }).ToList();
             return sortedGroups;
         }
+
+
+
+
 
         #endregion
 
@@ -803,6 +849,7 @@ namespace D2TxtCompare
         //User changed file to compare
         private void dropFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
+            textValues.Clear();
             sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
             targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
             CompareFiles(sourceFolderPathC, targetFolderPathC);
@@ -810,8 +857,6 @@ namespace D2TxtCompare
             textSearch.Font = new Font(textSearch.Font.FontFamily, 10, FontStyle.Italic);
             textSearch.ForeColor = SystemColors.WindowFrame;
             textSearch.Text = "Search Term(s)";
-
-            textValues.Clear();
             btnBatchLoad.ForeColor = Color.BurlyWood;
         }
 
@@ -916,10 +961,14 @@ namespace D2TxtCompare
                 }
             }
 
-            dropFiles.Items.Clear();
-            PopulateComboBox(sourceFolderPath, targetFolderPath, dropFiles);
-            UpdateRichTextBox(sourceFolderPath, targetFolderPath, textFiles);
-            CompareFiles(sourceFolderPathC, targetFolderPathC);
+            if (sourceFolderPath.Length > 0)
+            {
+                dropFiles.Items.Clear();
+                PopulateComboBox(sourceFolderPath, targetFolderPath, dropFiles);
+                UpdateRichTextBox(sourceFolderPath, targetFolderPath, textFiles);
+                CompareFiles(sourceFolderPathC, targetFolderPathC);
+            }
+
         }
 
         //Show all files that exist in both comparison folders
@@ -1023,6 +1072,53 @@ namespace D2TxtCompare
                     richTextBox.AppendText(fileName + Environment.NewLine);
                 }
             }
+        }
+
+        //User included new rows in value breakdown
+        private void checkNewValues_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkNewValues.Checked == true)
+            {
+                if (sourceFolderPath.Length > 0)
+                {
+                    checkNewValues.Checked = true;
+                    checkNewValues.Text = "Now processing the current file...";
+                    this.Refresh();
+                    if (String.IsNullOrEmpty(targetFolderPathC))
+                    {
+                        CompareFiles(sourceFolderPathC, targetFolderPathC);
+                        checkNewValues.Text = "Include new rows in value breakdown (Significant increase in process time)";
+                        this.Refresh();
+                    }
+                }
+            }
+            else
+            {
+                checkNewValues.Checked = false;
+                if (String.IsNullOrEmpty(targetFolderPathC))
+                    CompareFiles(sourceFolderPathC, targetFolderPathC);
+            }
+
+        }
+
+        //User opened source file
+        private void btnOpenSource_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = sourceFolderPathC + dropFiles.SelectedText,
+                UseShellExecute = true
+            });
+        }
+
+        //User opened target file
+        private void btnOpenTarget_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = targetFolderPathC + dropFiles.SelectedText,
+                UseShellExecute = true
+            });
         }
 
         #endregion

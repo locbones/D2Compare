@@ -46,6 +46,9 @@
             labelSearch = new Label();
             textFiles = new RichTextBox();
             labelStatus = new Label();
+            checkNewValues = new CheckBox();
+            btnOpenSource = new Button();
+            btnOpenTarget = new Button();
             SuspendLayout();
             // 
             // btnBatchLoad
@@ -56,11 +59,11 @@
             btnBatchLoad.FlatStyle = FlatStyle.Flat;
             btnBatchLoad.Font = new Font("Arial", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             btnBatchLoad.ForeColor = Color.BurlyWood;
-            btnBatchLoad.Location = new Point(667, 64);
+            btnBatchLoad.Location = new Point(598, 141);
             btnBatchLoad.Name = "btnBatchLoad";
             btnBatchLoad.Size = new Size(130, 39);
             btnBatchLoad.TabIndex = 1;
-            btnBatchLoad.Text = "Batch Load";
+            btnBatchLoad.Text = "Display All Files";
             btnBatchLoad.UseVisualStyleBackColor = false;
             btnBatchLoad.Click += btnBatchLoad_Click;
             // 
@@ -104,7 +107,7 @@
             // 
             // textColumns
             // 
-            textColumns.Location = new Point(6, 312);
+            textColumns.Location = new Point(6, 512);
             textColumns.Name = "textColumns";
             textColumns.Size = new Size(349, 421);
             textColumns.TabIndex = 6;
@@ -112,7 +115,7 @@
             // 
             // textRows
             // 
-            textRows.Location = new Point(361, 312);
+            textRows.Location = new Point(361, 512);
             textRows.Name = "textRows";
             textRows.Size = new Size(382, 421);
             textRows.TabIndex = 7;
@@ -120,7 +123,7 @@
             // 
             // textValues
             // 
-            textValues.Location = new Point(749, 312);
+            textValues.Location = new Point(749, 512);
             textValues.Name = "textValues";
             textValues.Size = new Size(622, 421);
             textValues.TabIndex = 8;
@@ -128,7 +131,7 @@
             // 
             // labelColumns
             // 
-            labelColumns.Location = new Point(6, 285);
+            labelColumns.Location = new Point(6, 485);
             labelColumns.Name = "labelColumns";
             labelColumns.Size = new Size(349, 24);
             labelColumns.TabIndex = 9;
@@ -137,7 +140,7 @@
             // 
             // labelRows
             // 
-            labelRows.Location = new Point(361, 285);
+            labelRows.Location = new Point(361, 485);
             labelRows.Name = "labelRows";
             labelRows.Size = new Size(382, 24);
             labelRows.TabIndex = 10;
@@ -147,17 +150,17 @@
             // dropFiles
             // 
             dropFiles.FormattingEnabled = true;
-            dropFiles.Location = new Point(526, 80);
+            dropFiles.Location = new Point(598, 81);
             dropFiles.Name = "dropFiles";
-            dropFiles.Size = new Size(134, 23);
+            dropFiles.Size = new Size(130, 23);
             dropFiles.TabIndex = 12;
             dropFiles.SelectedIndexChanged += dropFiles_SelectedIndexChanged;
             // 
             // labelFiles
             // 
-            labelFiles.Location = new Point(526, 55);
+            labelFiles.Location = new Point(598, 56);
             labelFiles.Name = "labelFiles";
-            labelFiles.Size = new Size(135, 23);
+            labelFiles.Size = new Size(130, 23);
             labelFiles.TabIndex = 13;
             labelFiles.Text = "Comparison File";
             labelFiles.TextAlign = ContentAlignment.MiddleCenter;
@@ -166,7 +169,7 @@
             // 
             textSearch.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point);
             textSearch.ForeColor = SystemColors.WindowFrame;
-            textSearch.Location = new Point(1012, 264);
+            textSearch.Location = new Point(1011, 464);
             textSearch.Name = "textSearch";
             textSearch.Size = new Size(100, 25);
             textSearch.TabIndex = 14;
@@ -183,7 +186,7 @@
             btnPrev.FlatAppearance.BorderSize = 0;
             btnPrev.FlatStyle = FlatStyle.Flat;
             btnPrev.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnPrev.Location = new Point(983, 265);
+            btnPrev.Location = new Point(982, 465);
             btnPrev.Name = "btnPrev";
             btnPrev.Size = new Size(23, 21);
             btnPrev.TabIndex = 15;
@@ -198,7 +201,7 @@
             btnNext.FlatAppearance.BorderSize = 0;
             btnNext.FlatStyle = FlatStyle.Flat;
             btnNext.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnNext.Location = new Point(1118, 265);
+            btnNext.Location = new Point(1117, 465);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(23, 21);
             btnNext.TabIndex = 16;
@@ -207,7 +210,7 @@
             // 
             // labelSearch
             // 
-            labelSearch.Location = new Point(749, 289);
+            labelSearch.Location = new Point(749, 492);
             labelSearch.Name = "labelSearch";
             labelSearch.Size = new Size(622, 20);
             labelSearch.TabIndex = 17;
@@ -216,9 +219,9 @@
             // 
             // textFiles
             // 
-            textFiles.Location = new Point(526, 114);
+            textFiles.Location = new Point(526, 225);
             textFiles.Name = "textFiles";
-            textFiles.Size = new Size(271, 128);
+            textFiles.Size = new Size(271, 220);
             textFiles.TabIndex = 19;
             textFiles.Text = "";
             // 
@@ -227,18 +230,52 @@
             labelStatus.BackColor = SystemColors.Control;
             labelStatus.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             labelStatus.ForeColor = Color.Black;
-            labelStatus.Location = new Point(526, 245);
+            labelStatus.Location = new Point(526, 448);
             labelStatus.Name = "labelStatus";
             labelStatus.Size = new Size(271, 20);
             labelStatus.TabIndex = 20;
             labelStatus.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // checkNewValues
+            // 
+            checkNewValues.Location = new Point(551, 184);
+            checkNewValues.Name = "checkNewValues";
+            checkNewValues.Size = new Size(228, 38);
+            checkNewValues.TabIndex = 21;
+            checkNewValues.Text = "Include new rows in value breakdown (Significant increase in process time)";
+            checkNewValues.TextAlign = ContentAlignment.MiddleCenter;
+            checkNewValues.UseVisualStyleBackColor = true;
+            checkNewValues.CheckedChanged += checkNewValues_CheckedChanged;
+            // 
+            // btnOpenSource
+            // 
+            btnOpenSource.Location = new Point(528, 109);
+            btnOpenSource.Name = "btnOpenSource";
+            btnOpenSource.Size = new Size(128, 23);
+            btnOpenSource.TabIndex = 22;
+            btnOpenSource.Text = "Open Source File";
+            btnOpenSource.UseVisualStyleBackColor = true;
+            btnOpenSource.Click += btnOpenSource_Click;
+            // 
+            // btnOpenTarget
+            // 
+            btnOpenTarget.Location = new Point(667, 109);
+            btnOpenTarget.Name = "btnOpenTarget";
+            btnOpenTarget.Size = new Size(130, 23);
+            btnOpenTarget.TabIndex = 23;
+            btnOpenTarget.Text = "Open Target File";
+            btnOpenTarget.UseVisualStyleBackColor = true;
+            btnOpenTarget.Click += btnOpenTarget_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1376, 739);
+            ClientSize = new Size(1376, 939);
+            Controls.Add(btnOpenTarget);
+            Controls.Add(btnOpenSource);
+            Controls.Add(checkNewValues);
             Controls.Add(labelStatus);
             Controls.Add(textFiles);
             Controls.Add(labelSearch);
@@ -282,5 +319,8 @@
         private Label labelSearch;
         private RichTextBox textFiles;
         private Label labelStatus;
+        private CheckBox checkNewValues;
+        private Button btnOpenSource;
+        private Button btnOpenTarget;
     }
 }
