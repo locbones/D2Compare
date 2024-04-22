@@ -14,11 +14,13 @@ namespace D2TxtCompare
         string targetFolderPath = "";
         string sourceFolderPathC = "";
         string targetFolderPathC = "";
+        string appVersion = "1.0.1";
 
         public Form1()
         {
             InitializeComponent();
             this.Icon = Properties.Resources.compare_yRb_icon;
+            this.Text = "D2Compare v" + appVersion;
         }
 
         #region Parsing Functions
