@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("D2TxtCompare")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ebd9f05238010160b2bbb5bc36d59941bd03107")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c329b1ac1777507fa64393c186cf85187703f3b")]
 [assembly: System.Reflection.AssemblyProductAttribute("D2TxtCompare")]
 [assembly: System.Reflection.AssemblyTitleAttribute("D2TxtCompare")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

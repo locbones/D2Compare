@@ -272,7 +272,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1376, 764);
+            ClientSize = new Size(1376, 770);
             Controls.Add(btnOpenTarget);
             Controls.Add(btnOpenSource);
             Controls.Add(checkNewValues);
