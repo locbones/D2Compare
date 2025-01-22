@@ -15,6 +15,7 @@ namespace D2TxtCompare
         string sourceFolderPathC = "";
         string targetFolderPathC = "";
         string appVersion = "1.0.2";
+        bool batchOn = false;
 
         public Form1()
         {
@@ -950,7 +951,7 @@ namespace D2TxtCompare
 
         private string FormatRtfBatch(List<(string, List<string>)> groupedDifferences, string fileName, string columnHeader)
         {
-            string rtf = @"{\rtf1\ansi\deff0{\colortbl ;\red255\green140\blue0;\red0\green0\blue128;\red255\green0\blue0;}\f0";
+            string rtf = @"{\rtf1\ansi\deff0{\colortbl ;\red255\green140\blue0;\red0\green0\blue128;\red255\green0\blue0;\red65\green105\blue255;\red220\green220\blue220;}\f0";
             bool isFirstGroup = true; // Flag to track the first group
 
             // Extract only the filename without the folder
@@ -970,8 +971,11 @@ namespace D2TxtCompare
                     rtf += $"{{\\cf1\\b\\fs22 {shortFileName}\\par}}"; // Dark orange, bold, 11px text for filename
                 }
 
-                rtf += $"{{\\cf2\\b {kvp.Item1}\\b0}}"; // Applying midnightblue color to the header
-                rtf += "\\cf0"; // Reset color to black
+                rtf += $"{{\\cf4\\b {kvp.Item1}\\b0}}"; // Applying midnightblue color to the header
+                if (btnViewMode.Tag == "Light")
+                    rtf += "\\cf0"; // Set text color to Black
+                else
+                    rtf += "\\cf5"; // Set text color to Gainsboro
 
                 // List all differences for the current column 0 value
                 foreach (var diff in kvp.Item2)
@@ -1458,10 +1462,19 @@ namespace D2TxtCompare
 
             labelStatus.Text = "";
             labelStatus.Refresh();
+
+            if (batchOn == false)
+                batchOn = true;
+            else
+                batchOn = false;
         }
 
         private void btnViewMode_Click(object sender, EventArgs e)
         {
+            textValues.Clear();
+            textColumns.Clear();
+            textRows.Clear();
+
             if (btnViewMode.Tag == "Light")
             {
                 btnViewMode.BackgroundImage = Properties.Resources.modeDark;
@@ -1489,7 +1502,26 @@ namespace D2TxtCompare
                 textValues.Clear();
                 sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
                 targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
-                CompareFiles(sourceFolderPathC, targetFolderPathC);
+                if (batchOn == false)
+                    CompareFiles(sourceFolderPathC, targetFolderPathC);
+                else
+                {
+                    // Get all TXT files in the source/target folder
+                    string[] sourceFiles = Directory.GetFiles(sourceFolderPath, "*.txt");
+                    string[] targetFiles = Directory.GetFiles(targetFolderPath, "*.txt");
+
+                    // Iterate over files in the source folder
+                    foreach (string sourceFile in sourceFiles)
+                    {
+                        string fileName = Path.GetFileName(sourceFile);
+                        string targetFile = Array.Find(targetFiles, f => Path.GetFileName(f).Equals(fileName, StringComparison.OrdinalIgnoreCase));
+
+                        if (targetFile != null)
+                            CompareFilesBatch(sourceFile, targetFile);
+                        else
+                            Debug.WriteLine($"Target file not found for {sourceFile}");
+                    }
+                }
                 textFiles.Clear();
                 UpdateRichTextBox(sourceFolderPath, targetFolderPath, textFiles);
 
@@ -1525,7 +1557,10 @@ namespace D2TxtCompare
                 textValues.Clear();
                 sourceFolderPathC = Path.Combine(sourceFolderPath, dropFiles.Text);
                 targetFolderPathC = Path.Combine(targetFolderPath, dropFiles.Text);
-                CompareFiles(sourceFolderPathC, targetFolderPathC);
+                if (batchOn == false)
+                    CompareFiles(sourceFolderPathC, targetFolderPathC);
+                else
+                    CompareFilesBatch(sourceFolderPathC, targetFolderPathC);
                 textFiles.Clear();
                 UpdateRichTextBox(sourceFolderPath, targetFolderPath, textFiles);
 
